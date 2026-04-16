@@ -1,0 +1,2 @@
+wecom-aibot-sdk-python
+aiohttp

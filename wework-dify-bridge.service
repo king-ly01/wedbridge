@@ -1,0 +1,17 @@
+[Unit]
+Description=WeWork Dify Bridge Service
+Documentation=file:///opt/wework-dify-bridge/README.md
+After=network.target
+
+[Service]
+Type=simple
+User=YOUR_USERNAME
+WorkingDirectory=/opt/wework-dify-bridge
+ExecStart=/usr/bin/python3 /opt/wework-dify-bridge/wework_smart_bot_final.py
+Restart=always
+RestartSec=5
+StandardOutput=append:/opt/wework-dify-bridge/bridge.log
+StandardError=append:/opt/wework-dify-bridge/bridge.log
+
+[Install]
+WantedBy=multi-user.target

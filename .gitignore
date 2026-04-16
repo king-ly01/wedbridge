@@ -1,0 +1,23 @@
+# 运行时产生的文件
+bridge.log
+bridge.pid
+*.log
+
+# 配置文件（含密钥，不要提交）
+config.json
+
+# Python 虚拟环境
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# 打包产物
+*.zip
+*.tar.gz
+
+# IDE
+.idea/
+.vscode/
+*.swp
