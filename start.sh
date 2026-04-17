@@ -32,7 +32,7 @@ do_start() {
         return
     fi
     echo -n "正在启动桥接服务..."
-    nohup "$PYTHON" "$MAIN" >> "$LOG" 2>&1 &
+    nohup env PYTHONUNBUFFERED=1 "$PYTHON" "$MAIN" >> "$LOG" 2>&1 &
     echo $! > "$PID_FILE"
     sleep 2
     pid=$(get_pid)
