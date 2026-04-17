@@ -1,21 +1,46 @@
 {
-  "wecom": {
-    "bot_id": "YOUR_WECOM_BOT_ID",
-    "secret": "YOUR_WECOM_BOT_SECRET"
-  },
-  "dify": {
-    "api_base": "http://127.0.0.1/v1",
-    "api_key": "app-YOUR_DIFY_API_KEY",
-    "input_variable": "input",
-    "output_variable": "text",
-    "timeout": 60
-  },
   "service": {
-    "welcome_message": "你好！我是 AI 助手，有什么可以帮你的吗？",
-    "thinking_message": "⏳ 思考中...",
-    "log_level": "INFO",
     "notify_port": 8899,
-    "notify_url_for_dify": "http://172.18.0.1:8899/notify",
-    "default_chatid": ""
-  }
+    "log_level": "INFO"
+  },
+  "bots": [
+    {
+      "id": "bot-meeting",
+      "description": "会议室预订机器人（示例1）",
+      "token": "your-token-for-bot1",
+      "wecom": {
+        "bot_id": "YOUR_WECOM_BOT_ID_1",
+        "secret": "YOUR_WECOM_BOT_SECRET_1"
+      },
+      "dify": {
+        "api_base": "http://127.0.0.1/v1",
+        "api_key": "app-YOUR_DIFY_API_KEY_1",
+        "input_variable": "input",
+        "output_variable": "text",
+        "timeout": 60
+      },
+      "default_chatid": "",
+      "welcome_message": "你好！我是会议室预订助手，有什么可以帮你的吗？",
+      "thinking_message": "⏳ 思考中..."
+    },
+    {
+      "id": "bot-hr",
+      "description": "HR 助手机器人（示例2）",
+      "token": "your-token-for-bot2",
+      "wecom": {
+        "bot_id": "YOUR_WECOM_BOT_ID_2",
+        "secret": "YOUR_WECOM_BOT_SECRET_2"
+      },
+      "dify": {
+        "api_base": "http://127.0.0.1/v1",
+        "api_key": "app-YOUR_DIFY_API_KEY_2",
+        "input_variable": "input",
+        "output_variable": "text",
+        "timeout": 60
+      },
+      "default_chatid": "",
+      "welcome_message": "你好！我是 HR 助手，有什么可以帮你的吗？",
+      "thinking_message": "⏳ 思考中..."
+    }
+  ]
 }
