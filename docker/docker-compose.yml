@@ -1,0 +1,89 @@
+name: wedbridge
+
+services:
+  # API 服务
+  api:
+    build:
+      context: ..
+      dockerfile: docker/api/Dockerfile
+    container_name: wedbridge-api
+    ports:
+      - "${API_PORT:-8899}:8899"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - SECRET_KEY=${SECRET_KEY}
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+    networks:
+      - wedbridge
+      - docker_default
+
+  # Worker 服务
+  worker:
+    build:
+      context: ..
+      dockerfile: docker/worker/Dockerfile
+    container_name: wedbridge-worker
+    ports:
+      - "8898:8898"  # 健康检查服务
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - API_URL=http://api:8899
+    depends_on:
+      - db
+      - api
+    restart: unless-stopped
+    networks:
+      - wedbridge
+      - docker_default
+
+  # Web 前端
+  web:
+    image: nginx:alpine
+    container_name: wedbridge-web
+    ports:
+      - "${WEB_PORT:-80}:80"
+    volumes:
+      - ../web/dist:/usr/share/nginx/html:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks:
+      - wedbridge
+
+  # PostgreSQL 数据库
+  db:
+    image: postgres:15-alpine
+    container_name: wedbridge-db
+    environment:
+      - POSTGRES_USER=wedbridge
+      - POSTGRES_PASSWORD=wedbridge
+      - POSTGRES_DB=wedbridge
+    volumes:
+      - ./volumes/db/data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    restart: unless-stopped
+    networks:
+      - wedbridge
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: wedbridge-redis
+    volumes:
+      - ./volumes/redis/data:/data
+    restart: unless-stopped
+    networks:
+      - wedbridge
+
+networks:
+  wedbridge:
+    driver: bridge
+  # 连接到 Dify 的网络，让 Dify 可以访问 WEDBRIDGE API
+  docker_default:
+    external: true

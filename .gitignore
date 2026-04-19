@@ -5,6 +5,8 @@ bridge.pid
 
 # 配置文件（含密钥，不要提交）
 config.json
+config/config.json
+docker/.env
 
 # Python 虚拟环境
 venv/
@@ -31,3 +33,12 @@ dist/
 
 # VS Code 编辑器状态
 .openeditors/
+
+# Node modules
+node_modules/
+web/node_modules/
+
+# 数据库数据
+db_data/
+docker/db_data/
+docker/volumes/

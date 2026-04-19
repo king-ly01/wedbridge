@@ -1,0 +1,72 @@
+/* WEDBRIDGE 全局样式变量 */
+
+/* 主题色 */
+$primary-color: #1a5fb4;
+$primary-dark: #0d3a7a;
+$primary-light: #4a90e2;
+
+/* 功能色 */
+$success-color: #67c23a;
+$warning-color: #e6a23c;
+$danger-color: #f56c6c;
+$info-color: #909399;
+
+/* 文字色 */
+$text-primary: #303133;
+$text-regular: #606266;
+$text-secondary: #909399;
+$text-placeholder: #c0c4cc;
+
+/* 边框色 */
+$border-base: #dcdfe6;
+$border-light: #e4e7ed;
+$border-lighter: #ebeef5;
+$border-extra-light: #f2f6fc;
+
+/* 背景色 */
+$bg-base: #f5f7fa;
+$bg-white: #ffffff;
+$bg-overlay: rgba(0, 0, 0, 0.5);
+
+/* 阴影 */
+$shadow-base: 0 4px 16px rgba(0, 0, 0, 0.08);
+$shadow-light: 0 2px 12px rgba(0, 0, 0, 0.06);
+$shadow-dark: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+/* 圆角 */
+$border-radius-small: 4px;
+$border-radius-base: 8px;
+$border-radius-large: 12px;
+$border-radius-round: 20px;
+
+/* 间距 */
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+/* 字体 */
+$font-family-base: 'Segoe UI', 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+$font-size-small: 12px;
+$font-size-base: 14px;
+$font-size-medium: 16px;
+$font-size-large: 18px;
+$font-size-xl: 20px;
+$font-size-xxl: 24px;
+
+/* 布局 */
+$container-max-width: 1400px;
+$sidebar-width: 200px;
+$header-height: 60px;
+
+/* 动画 */
+$transition-base: all 0.3s ease;
+$transition-fast: all 0.2s ease;
+$transition-slow: all 0.4s ease;
+
+/* 渐变 */
+$gradient-primary: linear-gradient(135deg, #1a5fb4 0%, #0d3a7a 100%);
+$gradient-success: linear-gradient(135deg, #67c23a 0%, #4a9c2d 100%);
+$gradient-warning: linear-gradient(135deg, #e6a23c 0%, #c27a1a 100%);
+$gradient-danger: linear-gradient(135deg, #f56c6c 0%, #d32f2f 100%);
