@@ -142,17 +142,61 @@ cd wedbridge/docker
 
 # 2. 配置环境变量
 cp .env.example .env
-# 编辑 .env 文件，修改必要配置
+# 编辑 .env 文件，修改必要配置（见下方 4.2.1）
 
-# 3. 启动服务
+# 3. 拉取预构建镜像
+docker compose pull
+
+# 4. 启动服务
 docker compose up -d
 
-# 4. 查看状态
+# 5. 查看状态
 docker compose ps
 
-# 5. 查看日志
+# 6. 查看日志
 docker compose logs -f
 ```
+
+#### 4.2.1 环境变量配置说明
+
+编辑 `docker/.env` 文件：
+
+```bash
+# ==================== 服务端口 ====================
+API_PORT=8899          # API 服务端口
+WEB_PORT=80            # Web 前端端口
+DB_PORT=5432           # PostgreSQL 端口（如与其他服务冲突请修改）
+
+# ==================== 数据库配置 ====================
+DATABASE_URL=postgresql://wedbridge:wedbridge@db:5432/wedbridge
+REDIS_URL=redis://redis:6379/0
+
+# ==================== 安全密钥 ====================
+# 生产环境请修改此密钥
+SECRET_KEY=your-secret-key-change-in-production
+
+# ==================== Dify 网络集成 ====================
+# 如果服务器上运行了 Dify，需要配置 Dify 的 Docker 网络名称
+# 查看方法：docker network ls | grep dify
+# 常见值：docker_default / dify_default
+DIFY_NETWORK=docker_default
+```
+
+> **重要**：`DIFY_NETWORK` 必须与 Dify 实际使用的 Docker 网络名一致，否则启动会报错。
+> 查看方法：`docker network ls | grep dify`
+
+#### 4.2.2 前端构建（首次部署需要）
+
+Web 前端通过 Nginx 挂载静态文件，首次部署需要构建：
+
+```bash
+# 安装 Node.js 18+（如未安装）
+cd wedbridge/web
+npm install
+npm run build     # 生成 dist/ 目录
+```
+
+构建完成后 `docker compose up -d` 即可，Nginx 会自动挂载 `web/dist` 目录。
 
 ### 4.3 访问系统
 
@@ -174,9 +218,23 @@ docker compose logs -f worker
 docker compose logs -f api
 
 # 更新到最新版本
+cd wedbridge && git pull
+cd docker
 docker compose pull
 docker compose up -d
 ```
+
+### 4.5 镜像说明
+
+| 镜像 | 来源 | 说明 |
+|------|------|------|
+| `ghcr.io/king-ly01/wedbridge-api` | GHCR（公开） | API 服务，FastAPI 后端 |
+| `ghcr.io/king-ly01/wedbridge-worker` | GHCR（公开） | Worker 服务，WebSocket 连接池 |
+| `nginx:alpine` | Docker Hub | Web 前端，挂载本地 dist 目录 |
+| `postgres:15-alpine` | Docker Hub | 数据库 |
+| `redis:7-alpine` | Docker Hub | 消息队列 |
+
+> API 和 Worker 镜像托管在 GitHub Container Registry（ghcr.io），已设为 Public，无需登录即可拉取。
 
 ---
 
