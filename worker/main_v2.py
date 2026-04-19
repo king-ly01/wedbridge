@@ -43,10 +43,23 @@ async def call_dify_workflow(query: str, user_id: str, chatid: str,
             if response.status_code == 200:
                 result = response.json()
                 outputs = result.get('data', {}).get('outputs', {})
-                answer = outputs.get('text', outputs.get('answer', ''))
+                answer = outputs.get('text') or outputs.get('answer') or outputs.get('body') or outputs.get('result') or outputs.get('output') or outputs.get('message') or ''
+                
+                # 如果 answer 是 JSON 字符串，尝试提取 message 字段
+                if answer and isinstance(answer, str):
+                    try:
+                        parsed = json.loads(answer)
+                        if isinstance(parsed, dict):
+                            answer = parsed.get('message') or parsed.get('text') or parsed.get('answer') or answer
+                    except (json.JSONDecodeError, TypeError):
+                        pass
+                
+                if isinstance(answer, dict):
+                    answer = answer.get('message') or answer.get('text') or answer.get('answer') or json.dumps(answer, ensure_ascii=False)
+                
                 if not answer:
                     answer = str(outputs)
-                return answer
+                return str(answer)
             else:
                 return f"Service temporarily unavailable (HTTP {response.status_code})"
                 

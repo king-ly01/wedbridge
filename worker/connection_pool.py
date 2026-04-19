@@ -216,14 +216,28 @@ async def call_dify_workflow(query: str, user_id: str, chatid: str,
                 outputs = result.get('data', {}).get('outputs', {})
                 print(f"[{datetime.now()}] [Dify] outputs: {outputs}")
                 
-                # 支持多种输出字段名：text, answer, body, result, output
-                answer = outputs.get('text') or outputs.get('answer') or outputs.get('body') or outputs.get('result') or outputs.get('output') or ''
+                # 支持多种输出字段名：text, answer, body, result, output, message
+                answer = outputs.get('text') or outputs.get('answer') or outputs.get('body') or outputs.get('result') or outputs.get('output') or outputs.get('message') or ''
+                
+                # 如果 answer 是 JSON 字符串，尝试提取 message 字段
+                if answer and isinstance(answer, str):
+                    try:
+                        parsed = json.loads(answer)
+                        if isinstance(parsed, dict):
+                            answer = parsed.get('message') or parsed.get('text') or parsed.get('answer') or answer
+                    except (json.JSONDecodeError, TypeError):
+                        pass
+                
+                # 如果 answer 是 dict，提取 message 字段
+                if isinstance(answer, dict):
+                    answer = answer.get('message') or answer.get('text') or answer.get('answer') or json.dumps(answer, ensure_ascii=False)
+                
                 if not answer:
-                    answer = str(outputs) if outputs else "(Dify no output, please check workflow end node has text/answer/body output field configured)"
-                    print(f"[{datetime.now()}] [Dify] Warning: text/answer/body/result/output field not found")
+                    answer = str(outputs) if outputs else "(Dify no output, please check workflow end node has text/answer/body/message output field configured)"
+                    print(f"[{datetime.now()}] [Dify] Warning: no known output field found")
                 else:
-                    print(f"[{datetime.now()}] [Dify] Got answer: {answer[:80]}...")
-                return answer
+                    print(f"[{datetime.now()}] [Dify] Got answer: {str(answer)[:80]}...")
+                return str(answer)
             elif response.status_code == 401:
                 err_text = response.text[:500]
                 print(f"[{datetime.now()}] [Dify] 401 Unauthorized: API Key invalid or expired")
