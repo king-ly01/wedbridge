@@ -232,6 +232,15 @@ async def call_dify_workflow(query: str, user_id: str, chatid: str,
                 if isinstance(answer, dict):
                     answer = answer.get('message') or answer.get('text') or answer.get('answer') or json.dumps(answer, ensure_ascii=False)
                 
+                # 如果仍未找到，优先从 outputs 中提取 message 字段的纯文本
+                if not answer and isinstance(outputs, dict):
+                    # 遍历 outputs 找第一个非空字符串值（优先 message）
+                    for key in ['message', 'text', 'answer', 'body', 'result', 'output']:
+                        val = outputs.get(key)
+                        if val and isinstance(val, str) and len(val) > 0:
+                            answer = val
+                            break
+                
                 if not answer:
                     answer = str(outputs) if outputs else "(Dify no output, please check workflow end node has text/answer/body/message output field configured)"
                     print(f"[{datetime.now()}] [Dify] Warning: no known output field found")
