@@ -213,6 +213,12 @@ cd wedbridge && git pull
 cd docker
 docker compose pull
 docker compose up -d
+
+# 重置数据库（清空所有数据，恢复出厂状态）
+docker compose down
+rm -rf volumes/db/data
+docker compose up -d
+# 重启后自动创建干净数据库，仅包含默认 admin 账户
 ```
 
 ### 4.5 镜像说明
